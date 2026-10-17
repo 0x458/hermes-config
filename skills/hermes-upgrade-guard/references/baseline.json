@@ -1,0 +1,35 @@
+{
+  "base_commit": "d923a5eb487a17c0a68801bba9ef0f56c81040a8",
+  "files": {
+    "skills/devops/host-health-observation/scripts/healthwatch.py": "da58091d181c00cb2372b4f288875236a8b255afeca87a52158161fd83ab3c0f",
+    "skills/devops/host-health-observation/SKILL.md": "9d5dd1de2916928373b7372ef0dd4b6ff413c4027198c1864356b9acde04b14c",
+    "skills/devops/host-health-observation/scripts/prepare.py": "43e8847b8cbe7b7f9c5f9cd883d336f36881bcdfc194eb3aa681b72296787345"
+  },
+  "soul_sections": [
+    {
+      "heading": "## 自主执行约定（用户授权，2026-10-17）",
+      "sha256": "446452c043acfd2f600e4fcf824b00466bd74219bdd37c60e9a2da2b650f691f"
+    },
+    {
+      "heading": "## 启动效率",
+      "sha256": "2454954f705bd79e60e93d185b447b8054448345a99193c6d8a8b284686e9a7b"
+    }
+  ],
+  "config": {
+    "agent.gateway_auto_continue_freshness": 86400,
+    "agent.gateway_startup_restore_drain_timeout": 30,
+    "agent.cron_drain_timeout": 40,
+    "cron.allow_agent_scheduling": true,
+    "agent.restart_drain_timeout": 30,
+    "agent.max_turns": 300,
+    "approvals.cron_mode": "approve",
+    "timezone": "Asia/Shanghai",
+    "cron.catch_up_missed": true,
+    "approvals.mode": "off",
+    "approvals.single_query_mode": "approve",
+    "approvals.unattended_mode": "approve",
+    "cron.require_restart_safe_scope": true,
+    "checkpoints.enabled": true,
+    "cron.max_parallel_jobs": 2
+  }
+}

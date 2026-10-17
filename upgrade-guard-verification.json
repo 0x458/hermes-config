@@ -1,0 +1,29 @@
+{
+  "recorded_date": "2026-10-18",
+  "timezone": "Asia/Shanghai",
+  "skill": "hermes-upgrade-guard",
+  "version": "0.1.0",
+  "installation_prestate_backed_up": true,
+  "previous_skill_existed": false,
+  "installed_files": 4,
+  "native_skill_view_success": true,
+  "static_instance_checks_passed": 21,
+  "isolated_tests_passed": 6,
+  "isolated_tests_failed": 0,
+  "tested_faults": [
+    "changed parameter and sensitive-value non-disclosure",
+    "missing or duplicate SOUL section",
+    "changed or missing script",
+    "recovery patch no longer active",
+    "unparseable configuration"
+  ],
+  "audit_readonly_test_passed": true,
+  "static_success_never_claims_runtime_validation": true,
+  "automatic_pre_update_backup_enabled": false,
+  "existing_config_changed": false,
+  "core_source_changed": false,
+  "hermes_upgraded": false,
+  "gateway_restarted": false,
+  "new_version_runtime_verified": false,
+  "limitation": "Skill installation and drift detection were tested. No upgrade was performed; a future version still requires recovery tests and a fresh background/cron acceptance run."
+}
