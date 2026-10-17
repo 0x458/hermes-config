@@ -1,0 +1,19 @@
+approvals:
+  mode: 'off'
+  cron_mode: approve
+  single_query_mode: approve
+  unattended_mode: approve
+agent:
+  max_turns: 300
+  restart_drain_timeout: 30
+  cron_drain_timeout: 40
+  gateway_auto_continue_freshness: 86400
+  gateway_startup_restore_drain_timeout: 30
+cron:
+  catch_up_missed: true
+  allow_agent_scheduling: true
+  max_parallel_jobs: 2
+  require_restart_safe_scope: true
+checkpoints:
+  enabled: true
+timezone: Asia/Shanghai

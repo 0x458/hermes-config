@@ -1,0 +1,60 @@
+{
+  "recorded_date": "2026-10-18",
+  "timezone": "Asia/Shanghai",
+  "evidence_type": "Historical measurements from deployed instance; sanitized export",
+  "base_commit": "d923a5eb487a17c0a68801bba9ef0f56c81040a8",
+  "model": "gpt-6-astra",
+  "reasoning": "high",
+  "diagnosis": {
+    "baseline_launch_to_sample_s": 185.4878716468811,
+    "baseline_tool_calls_before_sample": 13,
+    "baseline_completed_tool_duration_sum_s": 12.101,
+    "largest_model_response_gap_s": 115.14,
+    "cause": "Repeated framework inspection and generation of a 13k-character collector, not slow server tool execution."
+  },
+  "changes": [
+    "Added a native reusable host-health-observation skill",
+    "Added startup-efficiency rules to SOUL.md",
+    "Made the sampler the sole writer of task_state.md and separated agent audit files"
+  ],
+  "same_prompt_except_workdir": true,
+  "config_unchanged_during_startup_optimization": true,
+  "regression_tests": {
+    "passed": 97,
+    "failed": 0
+  },
+  "lint_checks": 12,
+  "background_recovery": {
+    "recovered_count": 1,
+    "same_pid": true,
+    "detached": true,
+    "watchers_restored": 1,
+    "real_child_completed": true
+  },
+  "final_run": {
+    "startup_s": 22.272627353668213,
+    "startup_reduction_pct": 87.99240772136882,
+    "tool_calls_before_sample": 2,
+    "full_conversation_ms": 409145,
+    "launch_to_report_s": 371.09219551086426,
+    "sample_count": 11,
+    "span_seconds": 300.0500063896179,
+    "progress_cron_executed": true,
+    "finalizer": "cron",
+    "sampler_exited": true,
+    "completed_cron_jobs": 2,
+    "state_file_agent_writes": 0,
+    "final_response_mutation_warning": false,
+    "additional_continue_messages": 0,
+    "gateway_pid_unchanged": true,
+    "gateway_restart_count_unchanged": true
+  },
+  "validation": [
+    "Native skill/SOUL loading",
+    "Preparation refuses overwrites",
+    "Premature completion is refused",
+    "State transitions show completed without another step",
+    "Two complete five-minute background/cron runs"
+  ],
+  "limitation": "These timings measure this reused health-observation workflow; other task types have not been benchmarked."
+}

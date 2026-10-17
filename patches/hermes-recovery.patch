@@ -1,0 +1,47 @@
+diff --git a/gateway/run_startup.py b/gateway/run_startup.py
+index b2d003d4b2..d2a4abd0f7 100644
+--- a/gateway/run_startup.py
++++ b/gateway/run_startup.py
+@@ -726,9 +726,14 @@ class GatewayStartupMixin:
+         finished its turn (the marker is held until the reply is ledgered), so nothing re-runs it —
+         the old 120 s recency sweep re-answered every recently active chat. Returns (resumed,
+         ledgered)."""
+-        from gateway.run import _float_env
++        from gateway.run import _auto_continue_freshness_window, _float_env
+         resumed = ledgered = 0
+-        max_age = max(60 * 60, int(max(1.0, _float_env("HERMES_AGENT_TIMEOUT", 1800)) * 2))
++        # Keep crash-left markers for the configured restart window as well as the
++        # timeout floor; otherwise long authorized tasks disappear before auto-resume.
++        max_age = max(
++            60 * 60, int(max(1.0, _float_env("HERMES_AGENT_TIMEOUT", 1800)) * 2),
++            int(_auto_continue_freshness_window()),
++        )
+         with _log_suppressed(logging.WARNING, "Crash-left reply recovery on startup failed: %s"):
+             ledgered = await self._ledger_crash_left_replies(max_age)
+         with _log_suppressed(logging.WARNING, "Exact active-turn recovery on startup failed: %s"):
+diff --git a/tests/gateway/test_active_turn_recovery.py b/tests/gateway/test_active_turn_recovery.py
+index 8476effd96..ceb837343e 100644
+--- a/tests/gateway/test_active_turn_recovery.py
++++ b/tests/gateway/test_active_turn_recovery.py
+@@ -554,3 +554,21 @@ async def test_turn_marker_start_survives_a_timezone_change_across_the_crash(tmp
+     assert _entry_for(store, source).resume_pending is True
+     assert sweep_recoverable(deliverable_platforms={"discord"}) == []
+     _close_store_db(store)
++
++
++@pytest.mark.asyncio
++@pytest.mark.parametrize("freshness,age_hours,expected", [(86400, 2, 1), (86400, 25, 0), (3600, 2, 0)])
++async def test_unclean_recovery_honors_configured_freshness(tmp_path, monkeypatch, freshness, age_hours, expected):
++    """Crash recovery keeps unfinished turns throughout the configured restart window."""
++    monkeypatch.setattr("gateway.run._auto_continue_freshness_window", lambda: freshness)
++    monkeypatch.setattr("gateway.run._float_env", lambda _key, _default: 1800)
++    runner, store = _db_runner(tmp_path)
++    source = _turn(store, "configured-recovery-window", marked=True, reply=None)
++    entry = _entry_for(store, source)
++    entry.active_turn_started_at = datetime.now() - timedelta(hours=age_hours)
++    store._save_entry(entry.session_key)
++    try:
++        assert await runner._recover_unclean_sessions() == (expected, 0)
++        assert _entry_for(store, source).resume_pending is bool(expected)
++    finally:
++        _close_store_db(store)
